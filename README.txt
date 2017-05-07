@@ -7,4 +7,4 @@ Please enter the count of mazes you would like to get solved
 Please enter maze txt file path
 C:\Users\John\Desktop\MazeTxt\small.txt
 
-After it will produce the out with the time it took to solve.
+After it will produce the output with the time it took to solve.
