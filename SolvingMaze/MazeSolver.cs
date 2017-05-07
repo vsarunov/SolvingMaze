@@ -22,7 +22,9 @@ namespace SolvingMaze
         public void SolveMaze()
         {
             Dictionary<Tuple<int, int>, bool> alreadySearched = new Dictionary<Tuple<int, int>, bool>();
+            // Add original starting point to avoid small missleading
             alreadySearched[new Tuple<int, int>(this.StartingPoints.Item1, this.StartingPoints.Item2)] = true;
+
             var shortestPathCoordinates = this.GetShortestPathCoordinates(this.StartingPoints.Item1, this.StartingPoints.Item2, alreadySearched);
             this.ReplaceCoordinatesToShortestPath(shortestPathCoordinates);
             this.SetMazeStartAndFinish();
@@ -36,9 +38,13 @@ namespace SolvingMaze
             List<Tuple<int, int>> downCoordinates = new List<Tuple<int, int>>(coordinates ?? new List<Tuple<int, int>>());
             List<Tuple<int, int>> upCoordinates = new List<Tuple<int, int>>(coordinates ?? new List<Tuple<int, int>>());
 
+            //Check to see if the point has been already searched
             bool searchResult;
             Tuple<int, int> newTuple = new Tuple<int, int>(startX, startY + 1);
             alreadySearched.TryGetValue(newTuple, out searchResult);
+
+            // Check if we are not hitting a wall and that we are not hitting the Finish coordinates and if we have already checked this Point
+            // If we reached the Final Point do nothing leave the coordinates list to be compared with the rest who managed to reach the exit
             if (!this.Maze[startX, startY + 1].Equals("1") && (startX != this.FinishPoints.Item1 || startY + 1 != this.FinishPoints.Item2) && !searchResult)
             {
                 rightCoordinates.Add(newTuple);
@@ -103,8 +109,10 @@ namespace SolvingMaze
                     this.Maze[this.FinishPoints.Item1, FinishPoints.Item2 - 1] == "X" ? true : false;
         }
 
+
         private List<Tuple<int, int>> FindShortestPathCollection(List<List<Tuple<int, int>>> listOfCoordinatesList)
         {
+            // Need to find the shortest path among the valid paths
             List<Tuple<int, int>> result = new List<Tuple<int, int>>();
             foreach (var item in listOfCoordinatesList)
             {

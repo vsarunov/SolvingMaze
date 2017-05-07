@@ -16,7 +16,10 @@ namespace SolvingMaze
             Console.WriteLine("Please enter maze txt file path");
             string path = Console.ReadLine();
 
-            // Start Solving
+            /*
+             * Separated the process into two classes, As providing the maze and its information
+             * is a responsibility of one and solving it of another
+             */
             Stopwatch stopWatch = new Stopwatch();
             MazeProvider provider = new MazeProvider(path);
             stopWatch.Start();
