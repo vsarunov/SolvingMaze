@@ -8,20 +8,21 @@ namespace SolvingMaze
 {
     public class MazeSolver
     {
-        private string[] FileText;
         private string[,] Maze;
         private Tuple<int, int> StartingPoints;
         private Tuple<int, int> FinishPoints;
-        private Tuple<int, int> MazeSizePoints;
 
-        public MazeSolver(string[] fileText)
+        public MazeSolver(string[,] maze, Tuple<int, int> startingPoints, Tuple<int, int> finishPoints)
         {
-            this.FileText = fileText;
-            this.MazeSizePoints = this.GetMazeInformationByIndex(0);
-            this.StartingPoints = this.GetMazeInformationByIndex(1);
-            this.FinishPoints = this.GetMazeInformationByIndex(2);
-            this.Maze = this.GetMazeFromText();
+            this.StartingPoints = startingPoints;
+            this.FinishPoints = finishPoints;
+            this.Maze = maze;
+        }
+
+        public void SolveMaze()
+        {
             Dictionary<Tuple<int, int>, bool> alreadySearched = new Dictionary<Tuple<int, int>, bool>();
+            alreadySearched[new Tuple<int, int>(this.StartingPoints.Item1, this.StartingPoints.Item2)] = true;
             var shortestPathCoordinates = this.GetShortestPathCoordinates(this.StartingPoints.Item1, this.StartingPoints.Item2, alreadySearched);
             this.ReplaceCoordinatesToShortestPath(shortestPathCoordinates);
             this.SetMazeStartAndFinish();
@@ -93,6 +94,7 @@ namespace SolvingMaze
             return result;
         }
 
+        //If the end point has no X near there is no solution
         private bool checkIfSolutionWasFound()
         {
             return this.Maze[this.FinishPoints.Item1 - 1, FinishPoints.Item2] == "X" ? true :
@@ -127,25 +129,6 @@ namespace SolvingMaze
             }
         }
 
-        private string[,] GetMazeFromText()
-        {
-            string[,] maze = new string[this.MazeSizePoints.Item1, this.MazeSizePoints.Item2];
-            for (int i = 3; i < this.FileText.Length; i++)
-            {
-                var line = this.FileText[i].Split(' ');
-                for (int y = 0; y < line.Length; y++)
-                {
-                    maze[i - 3, y] = line[y];
-                }
-            }
-            return maze;
-        }
-
-        private Tuple<int, int> GetMazeInformationByIndex(int informationIndex)
-        {
-            string[] sizePoint = this.FileText[informationIndex].Split(' ');
-            return new Tuple<int, int>(int.Parse(sizePoint[1]), int.Parse(sizePoint[0]));
-        }
 
         private void SetMazeStartAndFinish()
         {
@@ -176,18 +159,14 @@ namespace SolvingMaze
             bool solutionFound = this.checkIfSolutionWasFound();
             if (solutionFound)
             {
-                int rowLength = this.Maze.GetLength(0);
-                int colLength = this.Maze.GetLength(1);
-
-                for (int i = 0; i < rowLength; i++)
+                for (int i = 0; i < this.Maze.GetLength(0); i++)
                 {
-                    for (int y = 0; y < colLength; y++)
+                    for (int y = 0; y < this.Maze.GetLength(1); y++)
                     {
                         Console.Write(string.Format("{0}", this.Maze[i, y]));
                     }
                     Console.WriteLine();
                 }
-                Console.ReadLine();
             }
             else
             {
