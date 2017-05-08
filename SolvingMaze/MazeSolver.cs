@@ -28,7 +28,7 @@ namespace SolvingMaze
             var shortestPathCoordinates = this.GetShortestPathCoordinates(this.StartingPoints.Item1, this.StartingPoints.Item2, alreadySearched);
             this.ReplaceCoordinatesToShortestPath(shortestPathCoordinates);
             this.SetMazeStartAndFinish();
-            this.SetMazeWallsToHashTag();
+            this.UpdateMazeWallsAndPassage();
         }
 
         private List<Tuple<int, int>> GetShortestPathCoordinates(int startX, int startY, Dictionary<Tuple<int, int>, bool> alreadySearched, List<Tuple<int, int>> coordinates = null)
@@ -144,7 +144,7 @@ namespace SolvingMaze
             this.Maze[this.FinishPoints.Item1, this.FinishPoints.Item2] = "E";
         }
 
-        private void SetMazeWallsToHashTag()
+        private void UpdateMazeWallsAndPassage()
         {
             int rowLength = this.Maze.GetLength(0);
             int colLength = this.Maze.GetLength(1);
@@ -156,6 +156,10 @@ namespace SolvingMaze
                     if (this.Maze[i, y].Equals("1"))
                     {
                         this.Maze[i, y] = "#";
+                    }
+                    else if (this.Maze[i, y].Equals("0"))
+                    {
+                        this.Maze[i, y] = " ";
                     }
                 }
             }
